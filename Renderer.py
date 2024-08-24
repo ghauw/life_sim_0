@@ -1,5 +1,6 @@
 import pygame
 
+
 class Renderer:
     def __init__(self, window):
         self.window = window
@@ -22,7 +23,9 @@ class Renderer:
                            (int(body['x']), int(body['y'])), 5)
 
     def draw_microbe(self, body):
-        pygame.draw.circle(self.window, (0, 255, 0),
+        color = (0, 255, 0) if body['alive'] else (
+            255, 0, 0)  # Green for alive, red for dead
+        pygame.draw.circle(self.window, color,
                            (int(body['x']), int(body['y'])), 3)
 
     def draw_atom(self, body):

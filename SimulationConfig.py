@@ -1,7 +1,7 @@
 import random
 
 
-class UniverseFactory:
+class UniverseFactoryModule:
     def create_universe(self, universe_type):
         if universe_type == "Cosmic System":
             return {"universe_type": universe_type, "properties": self.create_cosmic_system()}
@@ -50,7 +50,7 @@ class UniverseFactory:
 class SimulationConfig:
     def __init__(self):
         self.universe_type = self.get_universe_type()
-        self.properties = UniverseFactory().create_universe(
+        self.properties = UniverseFactoryModule().create_universe(
             self.universe_type)  # Removed extra argument
 
     def get_universe_type(self):

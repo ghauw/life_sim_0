@@ -38,8 +38,15 @@ class LifeEngine:
             if microbe['alive'] and self.resources > 0:
                 reproduction_chance = self.sine_reproduction(self.time_step)
                 if random.random() < reproduction_chance:
-                    new_microbe = {"type": "Microbe", "age": 0,
-                                   "alive": True, "growth_rate": microbe['growth_rate']}
+                    new_microbe = {
+                        "type": "Microbe",
+                        "age": 0,
+                        "alive": True,
+                        "growth_rate": microbe['growth_rate'],
+                        # Ensure position is inherited or new one is generated
+                        "x": microbe.get('x', random.uniform(0, 800)),
+                        "y": microbe.get('y', random.uniform(0, 600))
+                    }
                     new_microbes.append(new_microbe)
                     self.resources -= 1
         self.microbes.extend(new_microbes)

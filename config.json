@@ -1,0 +1,26 @@
+{
+    "cosmic": {
+        "num_bodies": 100,
+        "gravitational_constant": 6.67430e-11,
+        "universe_type": "Cosmic System"
+    },
+    "microbial": {
+        "initial_population": 100,
+        "growth_rate": 0.1,
+        "reproduction_rate": 0.05,
+        "death_rate": 0.02,
+        "universe_type": "Microbial System"
+    },
+    "atomic": {
+        "num_bodies": 100,
+        "charge_interaction": 1.0,
+        "universe_type": "Atomic System"
+    },
+    "display": {
+        "screen_width": 800,
+        "screen_height": 600,
+        "full_screen": false,
+        "refresh_rate": 60,
+        "sleep_time": 0.016
+    }
+}

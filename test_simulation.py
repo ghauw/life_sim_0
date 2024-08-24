@@ -1,15 +1,15 @@
-import random
-import pygame
-from main import main as run_simulation
-from SimulationConfig import SimulationConfig, UniverseFactory
+from UniverseFactoryModule import UniverseFactoryModule
+from PhysicsEngine import PhysicsEngine
+from main import main
 
 
-def run_simulations(num_iterations=100, log_file='simulation_logs.txt'):
-    for i in range(4):  # Four different test runs
-        print(f"Running iteration {i+1}/{4} with seed {i}...")
-        random.seed(i)
-        run_simulation()
-        # Collect logs and data here if needed
+def run_simulations():
+    # Test with different simulation types
+    simulation_types = ["Cosmic System", "Microbial System", "Atomic System"]
+
+    for sim_type in simulation_types:
+        print(f"Running simulation for {sim_type}...")
+        main(simulation_type_override=sim_type)
 
 
 if __name__ == "__main__":

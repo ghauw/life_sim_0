@@ -1,46 +1,92 @@
-from LifeEngine import LifeEngine  # Ensure this import is present
+from Config import Config
+from LifeEngine import LifeEngine
+import random
+import math
+
 
 class PhysicsEngine:
-    def __init__(self, config):
+    def __init__(self, config: Config):
         self.config = config
-        self.bodies = self.initialize_bodies()
+        self.bodies = list(self.initialize_bodies())
 
     def initialize_bodies(self):
-        bodies = []
-        if self.config['universe_type'] == "Cosmic System":
-            bodies = self.create_cosmic_bodies(self.config['properties']['num_bodies'])
-        elif self.config['universe_type'] == "Microbial System":
-            bodies = self.create_microbes(self.config['properties']['initial_population'])
-        elif self.config['universe_type'] == "Atomic System":
-            bodies = self.create_atoms(self.config['properties']['num_bodies'])
-        return bodies
-
-    def create_cosmic_bodies(self, num_bodies):
-        return [{"type": "Celestial Body", "mass": 1.0, "velocity": 0, "position": (0, 0)} for _ in range(num_bodies)]
-
-    def create_microbes(self, initial_population):
-        return [{"type": "Microbe", "age": 0, "alive": True, "growth_rate": self.config['properties']['growth_rate']} for _ in range(initial_population)]
-
-    def create_atoms(self, num_atoms):
-        return [{"type": "Atom", "charge": 1.0, "velocity": 0, "position": (0, 0)} for _ in range(num_atoms)]
+        raise NotImplementedError(
+            "This method should be overridden in subclasses")
 
     def apply_physics(self):
-        if self.config['universe_type'] == "Cosmic System":
-            self.apply_cosmic_physics()
-        elif self.config['universe_type'] == "Microbial System":
-            self.apply_microbial_physics()
-        elif self.config['universe_type'] == "Atomic System":
-            self.apply_atomic_physics()
+        raise NotImplementedError(
+            "This method should be overridden in subclasses")
 
-    def apply_cosmic_physics(self):
+
+class CosmicPhysicsEngine(PhysicsEngine):
+    def initialize_bodies(self):
+        for _ in range(self.config.num_bodies):
+            yield {
+                "type": "Celestial Body",
+                "mass": 1.0,
+                "vx": random.uniform(-1, 1),
+                "vy": random.uniform(-1, 1),
+                "x": random.uniform(0, 800),
+                "y": random.uniform(0, 600)
+            }
+
+    def apply_physics(self):
         for body in self.bodies:
-            # Enhanced gravitational interaction
-            body['velocity'] += body['mass'] * 0.01  # Simplified example
+            # Simple example: gravitational attraction to a point (400, 300)
+            center_x, center_y = 400, 300
+            dx = center_x - body['x']
+            dy = center_y - body['y']
+            distance = math.sqrt(dx**2 + dy**2)
+            force = self.config.gravitational_constant * \
+                body['mass'] / (distance**2)
+            body['vx'] += force * dx / distance
+            body['vy'] += force * dy / distance
+            body['x'] += body['vx']
+            body['y'] += body['vy']
 
-    def apply_microbial_physics(self):
-        life_engine = LifeEngine(self.bodies, resources=100)  # Make sure LifeEngine is imported and used correctly
+
+class MicrobialPhysicsEngine(PhysicsEngine):
+    def initialize_bodies(self):
+        print("Initializing microbial bodies...")
+        for _ in range(self.config.initial_population):
+            yield {
+                "type": "Microbe",
+                "age": 0,
+                "alive": True,
+                "growth_rate": self.config.growth_rate,
+                "x": random.uniform(0, 800),
+                "y": random.uniform(0, 600)
+            }
+
+    def apply_physics(self):
+        life_engine = LifeEngine(self.bodies, resources=100)
         life_engine.apply_life_cycle()
 
-    def apply_atomic_physics(self):
+
+class AtomicPhysicsEngine(PhysicsEngine):
+    def initialize_bodies(self):
+        for _ in range(self.config.num_bodies):
+            yield {
+                "type": "Atom",
+                "charge": 1.0,
+                "vx": random.uniform(-1, 1),
+                "vy": random.uniform(-1, 1),
+                "x": random.uniform(0, 800),
+                "y": random.uniform(0, 600)
+            }
+
+    def apply_physics(self):
         for body in self.bodies:
-            body['velocity'] += body['charge'] * 0.01  # Simplified charge interaction
+            # Example: Coulomb force interaction between charged partdricles
+            for other_body in self.bodies:
+                if other_body is not body:
+                    dx = other_body['x'] - body['x']
+                    dy = other_body['y'] - body['y']
+                    distance = math.sqrt(dx**2 + dy**2)
+                    if distance > 0:
+                        force = (body['charge'] *
+                                 other_body['charge']) / (distance**2)
+                        body['vx'] += force * dx / distance
+                        body['vy'] += force * dy / distance
+            body['x'] += body['vx']
+            body['y'] += body['vy']

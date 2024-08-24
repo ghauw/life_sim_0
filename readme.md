@@ -10,7 +10,7 @@ This project is a simulation environment using Pygame to model different types o
 - **LifeEngine.py**: Manages growth, reproduction, and death in the microbial system.
 - **LoggerEngine.py**: Logs metrics such as time, body count, and velocities.
 - **SimulationConfig.py**: Configures the simulation based on user or random input.
-- **UniverseFactory.py**: Creates different types of universes (Cosmic, Microbial, Atomic).
+- **UniverseFactoryModule.py**: Creates different types of universes (Cosmic, Microbial, Atomic).
 - **test_simulation.py**: Runs multiple iterations of the simulation for testing purposes.
 
 ## How to Run
